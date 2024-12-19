@@ -1,4 +1,5 @@
 import mountElement from './mountElement';
+import updateNodeElement from './updateNodeElement';
 import updateTextNode from './updateTextNode';
 
 export default function diff(virtualDOM, container, oldDOM) {
@@ -13,7 +14,7 @@ export default function diff(virtualDOM, container, oldDOM) {
 			updateTextNode(virtualDOM, oldVirtualDOM, oldDOM);
 		} else {
 			// 更新元素
-
+			updateNodeElement(oldDOM, virtualDOM, oldVirtualDOM)
 		}
 
 		// 对比子节点
@@ -21,8 +22,4 @@ export default function diff(virtualDOM, container, oldDOM) {
 			diff(child, oldDOM, oldDOM.childNodes[i]);
 		});
 	}
-
-
-
-	
 }
