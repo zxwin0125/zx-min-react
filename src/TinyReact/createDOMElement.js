@@ -1,5 +1,5 @@
-import mountElement from "./mountElement";
-import updateNodeElement from "./updateNodeElement";
+import mountElement from './mountElement';
+import updateNodeElement from './updateNodeElement';
 
 export default function createDOMElement(virtualDOM) {
 	let newElement = null;
@@ -9,11 +9,14 @@ export default function createDOMElement(virtualDOM) {
 	} else {
 		// 元素节点
 		newElement = document.createElement(virtualDOM.type);
-    updateNodeElement(newElement, virtualDOM)
+		updateNodeElement(newElement, virtualDOM);
 	}
+
+	newElement._virtualDOM = virtualDOM;
+
 	// 递归创建子节点
 	virtualDOM.children.forEach(child => {
 		mountElement(child, newElement);
 	});
-  return newElement;
+	return newElement;
 }
