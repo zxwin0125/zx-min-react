@@ -1,5 +1,5 @@
-import isFunction from './isFunction';
 import mountNativeElement from './mountNativeElement';
+import isFunction from './isFunction';
 import mountComponent from './mountComponent';
 
 export default function mountElement(virtualDOM, container, oldDOM) {
@@ -7,7 +7,7 @@ export default function mountElement(virtualDOM, container, oldDOM) {
 		// Component
 		mountComponent(virtualDOM, container, oldDOM);
 	} else {
-		// Native Element
+		// NativeElement
 		mountNativeElement(virtualDOM, container, oldDOM);
 	}
 }

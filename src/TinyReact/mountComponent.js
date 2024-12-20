@@ -1,33 +1,28 @@
-import isFunction from './isFunction';
 import isFunctionComponent from './isFunctionComponent';
 import mountNativeElement from './mountNativeElement';
+import isFunction from './isFunction';
 
 export default function mountComponent(virtualDOM, container, oldDOM) {
 	let nextVirtualDOM = null;
-	let component = null
-	// 判断是函数组件还是类组件
+	let component = null;
+	// 判断组件是类组件还是函数组件
 	if (isFunctionComponent(virtualDOM)) {
 		// 函数组件
 		nextVirtualDOM = buildFunctionComponent(virtualDOM);
 	} else {
 		// 类组件
 		nextVirtualDOM = buildClassComponent(virtualDOM);
-		component = nextVirtualDOM.component
+		component = nextVirtualDOM.component;
 	}
-
 	if (isFunction(nextVirtualDOM)) {
-		// Component
 		mountComponent(nextVirtualDOM, container, oldDOM);
 	} else {
-		// Native Element
 		mountNativeElement(nextVirtualDOM, container, oldDOM);
 	}
-
 	if (component) {
-		component.componentDidMount()
-		// ref
+		component.componentDidMount();
 		if (component.props && component.props.ref) {
-			component.props.ref(component)
+			component.props.ref(component);
 		}
 	}
 }
@@ -37,7 +32,6 @@ function buildFunctionComponent(virtualDOM) {
 }
 
 function buildClassComponent(virtualDOM) {
-	// 实例化组件
 	const component = new virtualDOM.type(virtualDOM.props || {});
 	const nextVirtualDOM = component.render();
 	nextVirtualDOM.component = component;

@@ -1,9 +1,9 @@
-import Component from "./Component";
-import createElement from "./createElement";
-import render from "./render";
+import createElement from './createElement';
+import render from './render';
+import Component from './Component';
 
 export default {
-  createElement,
-  render,
-  Component
-}
+	createElement,
+	render,
+	Component,
+};
