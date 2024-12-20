@@ -9,11 +9,12 @@ export default class Component {
     this.state = Object.assign({}, this.state, state)
     const virtualDOM = this.render()
     const oldDOM = this.getDOM()
-
-    diff(virtualDOM, oldDOM.parentNode, oldDOM)
+    // 容器
+    const container = oldDOM.parentNode
+    diff(virtualDOM, container, oldDOM)
   }
 
-  setDOM(dom) {
+  setDOM(dom) { 
     this._dom = dom
   }
 

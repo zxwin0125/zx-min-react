@@ -38,6 +38,7 @@ class Alert extends TinyReact.Component {
 		this.state = {
 			title: 'Default Title',
 		};
+		this.handleClick = this.handleClick.bind(this);
 	}
 
 	handleClick() {
@@ -45,7 +46,7 @@ class Alert extends TinyReact.Component {
 			title: 'Changed Title',
 		});
 	}
-  
+
 	render() {
 		console.log(this.state);
 		return (
@@ -61,7 +62,7 @@ class Alert extends TinyReact.Component {
 	}
 }
 
-// TinyReact.render(<Alert name="zx" />, root);
+TinyReact.render(<Alert />, root);
 
 // const virtualDOM = (
 //   <div className="container">
