@@ -22,13 +22,13 @@ const root = document.getElementById('root');
 
 // TinyReact.render(virtualDOM, root);
 
-// function Demo() {
-//   return <div>hello</div>
-// }
+function Demo() {
+  return <div>hello</div>
+}
 
-// function Heart (props) {
-// 	return <div>{props.title}&hearts;<Demo /></div>
-// }
+function Heart (props) {
+	return <div>{props.title}&hearts;<Demo /></div>
+}
 
 // TinyReact.render(<Heart title="zx" />, root);
 
@@ -62,7 +62,15 @@ class Alert extends TinyReact.Component {
 	}
 }
 
-TinyReact.render(<Alert />, root);
+// TinyReact.render(<Alert />, root);
+
+TinyReact.render(<Alert name="张三" age={20} />, root)
+
+setTimeout(() => {
+  // TinyReact.render(<Alert name="李四" age={39}  />, root)
+	TinyReact.render(<Heart title="zx" />, root);
+}, 2000)
+
 
 // const virtualDOM = (
 //   <div className="container">
