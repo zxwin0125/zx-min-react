@@ -19,10 +19,8 @@ export default function diff(virtualDOM, container, oldDOM) {
 		const newElement = createDOMElement(virtualDOM);
 		oldDOM.parentNode.replaceChild(newElement, oldDOM);
 	} else if (typeof virtualDOM.type === 'function') {
-		diffComponent(virtualDOM, oldComponent, oldDOM, container)
-	}
-	
-	else if (oldVirtualDOM && virtualDOM.type === oldVirtualDOM.type) {
+		diffComponent(virtualDOM, oldComponent, oldDOM, container);
+	} else if (oldVirtualDOM && virtualDOM.type === oldVirtualDOM.type) {
 		if (virtualDOM.type === 'text') {
 			// 更新文本
 			updateTextNode(virtualDOM, oldVirtualDOM, oldDOM);
@@ -31,10 +29,42 @@ export default function diff(virtualDOM, container, oldDOM) {
 			updateNodeElement(oldDOM, virtualDOM, oldVirtualDOM);
 		}
 
-		// 对比子节点
-		virtualDOM.children.forEach((child, i) => {
-			diff(child, oldDOM, oldDOM.childNodes[i]);
-		});
+		// 1. 将拥有key属性的子元素放置在一个单独的对象中
+		let keyedElements = {};
+		for (let i = 0, len = oldDOM.childNodes.length; i < len; i++) {
+			const domElement = oldDOM.childNodes[i];
+			if (domElement.nodeType === 1) {
+				let key = domElement.getAttribute('key');
+				if (key) {
+					keyedElements[key] = domElement;
+				}
+			}
+		}
+
+		const hasNokey = Object.keys(keyedElements).length === 0;
+
+		if (hasNokey) {
+			// 对比子节点
+			virtualDOM.children.forEach((child, i) => {
+				diff(child, oldDOM, oldDOM.childNodes[i]);
+			});
+		} else {
+			// 2. 循环 virtualDOM 的子元 素 获取子元素的 key 属性
+			virtualDOM.children.forEach((child, i) => {
+				let key = child.props.key;
+				if (key) {
+					let domElement = keyedElements[key];
+					if (domElement) {
+						// 3. 看看当前位置的元素是不是我们期望的元素
+						if (oldDOM.childNodes[i] && oldDOM.childNodes[i] !== domElement) {
+							oldDOM.insertBefore(domElement, oldDOM.childNodes[i]);
+						}
+					} else {
+						mountElement(child, oldDOM, oldDOM.childNodes[i])
+					}
+				}
+			});
+		}
 
 		// 删除节点
 		const oldChildNodes = oldDOM.childNodes;
