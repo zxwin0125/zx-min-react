@@ -60,7 +60,7 @@ export default function diff(virtualDOM, container, oldDOM) {
 							oldDOM.insertBefore(domElement, oldDOM.childNodes[i]);
 						}
 					} else {
-						mountElement(child, oldDOM, oldDOM.childNodes[i])
+						mountElement(child, oldDOM, oldDOM.childNodes[i]);
 					}
 				}
 			});
@@ -69,12 +69,27 @@ export default function diff(virtualDOM, container, oldDOM) {
 		// 删除节点
 		const oldChildNodes = oldDOM.childNodes;
 		if (oldChildNodes.length > virtualDOM.children.length) {
-			for (
-				let i = oldChildNodes.length - 1;
-				i > virtualDOM.children.length - 1;
-				i--
-			) {
-				unmountNode(oldChildNodes[i]);
+			// 有节点需要被删除
+			if (hasNokey) {
+				for (
+					let i = oldChildNodes.length - 1;
+					i > virtualDOM.children.length - 1;
+					i--
+				) {
+					unmountNode(oldChildNodes[i]);
+				}
+			} else {
+				// 通过 key 属性删除节点
+				for (let i = 0; i < oldChildNodes.length; i++) {
+					const oldChild = oldChildNodes[i];
+					const oldChildKey = oldChild._virtualDOM.props.key;
+					const found = virtualDOM.children.some(newChild => {
+						return oldChildKey === newChild.props.key;
+					});
+					if (!found) {
+						unmountNode(oldChild);
+					}
+				}
 			}
 		}
 	}
